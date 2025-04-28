@@ -15,7 +15,8 @@ public class ClothingOrder extends Order {
     public ClothingOrder(String orderId, String customerName, int oderDate, String size, double basePrice) {
         super(orderId, customerName, oderDate);
         this.basePrice = basePrice;
-        this.size = (size == null || size.trim().isEmpty()) ? "N/A" : size.toUpperCase(); // Chuẩn hóa size
+        //  gán giá trị cho thuộc tính size của đơn hàng quần áo
+        this.size = (size == null || size.trim().isEmpty()) ? "N/A" : size.toUpperCase(); // Chuẩn hóa size, k phân biệt chữ hoa và chữ thường
 
     }
 
