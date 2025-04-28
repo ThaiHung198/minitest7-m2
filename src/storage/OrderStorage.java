@@ -13,7 +13,7 @@ public class OrderStorage {
 
     public OrderStorage(String filename) {
         this.filename = (filename == null || filename.trim().isEmpty()) ? "default_orders.dat" : filename.trim();
-        System.out.println("INFO: OrderStorage initialized with file: " + this.filename);
+        System.out.println("THÔNG TIN: OrderStorage được khởi tạo bằng tệp: " + this.filename);
     }
 
     public void saveOrders(List<Order> orders) {
@@ -21,7 +21,7 @@ public class OrderStorage {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(listToSave);
         } catch (IOException e) {
-            System.err.println("FATAL ERROR: Could not save data to " + filename + " - " + e.getMessage());
+            System.err.println("LỖI: Không thể lưu dữ liệu vào " + filename + " - " + e.getMessage());
         }
     }
 
@@ -40,17 +40,17 @@ public class OrderStorage {
                 List<Order> loadedOrders = (List<Order>) obj;
                 return loadedOrders;
             } else {
-                System.err.println("ERROR: File '" + filename + "' contains invalid data format (not a List).");
+                System.err.println("LỖI: Tệp '" + filename + "' chứa định dạng dữ liệu không hợp lệ (không phải là Danh sách).");
                 return new ArrayList<>();
             }
         } catch (FileNotFoundException e) {
-            System.err.println("ERROR: File not found during read (unexpected): " + filename);
+            System.err.println("LỖI: Không tìm thấy tệp trong quá trình đọc (không mong muốn): " + filename);
             return new ArrayList<>();
         } catch (EOFException e) {
-            System.err.println("ERROR: Reached end of file unexpectedly for '" + filename + "'. File might be corrupted.");
+            System.err.println("LỖI: Đã đến cuối tệp một cách bất ngờ '" + filename + "'. Tập tin có thể bị hỏng.");
             return new ArrayList<>();
         } catch (IOException | ClassNotFoundException | ClassCastException e) {
-            System.err.println("ERROR: Failed to load or parse data from '" + filename + "': " + e.getMessage());
+            System.err.println("LỖI: Không tải hoặc phân tích được dữ liệu từ '" + filename + "': " + e.getMessage());
             return new ArrayList<>(); // Trả về rỗng khi có lỗi
         }
     }
