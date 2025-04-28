@@ -1,8 +1,8 @@
-package view; // Đặt trong package view
+package view;
 
 import controller.OrderManager;
-import model.*; // Import các lớp model
-import storage.OrderStorage; // Import lớp OrderStorage (class)
+import model.*;
+import storage.OrderStorage;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -11,11 +11,10 @@ import java.util.Scanner;
 public class Main {
 
     private static final String DATA_FILE = "orders.dat"; // Tên file dữ liệu (thường không dịch)
-    private static Scanner scanner = new Scanner(System.in); // Scanner cho toàn bộ lớp
-    private static OrderManager manager; // Đối tượng quản lý
+    private static Scanner scanner = new Scanner(System.in);
+    private static OrderManager manager;
 
     public static void main(String[] args) {
-        // Khởi tạo Storage và Manager
         OrderStorage storage = new OrderStorage(DATA_FILE);
         manager = new OrderManager(storage); // Manager sẽ tự load dữ liệu
 
@@ -26,14 +25,12 @@ public class Main {
             handleChoice(choice);
         } while (choice != 0);
 
-        // Lưu dữ liệu trước khi thoát
         System.out.println("Đang lưu dữ liệu trước khi thoát...");
         manager.saveOrders();
         System.out.println("Tạm biệt!");
         scanner.close(); // Đóng scanner
     }
 
-    // Hiển thị menu
     private static void displayMenu() {
         System.out.println("\n--- MENU QUẢN LÝ ĐƠN HÀNG ---");
         System.out.println("1. Thêm đơn hàng mới");
@@ -48,7 +45,6 @@ public class Main {
         System.out.print("Nhập lựa chọn của bạn: ");
     }
 
-    // Lấy lựa chọn từ người dùng
     private static int getUserChoice() {
         int choice = -1;
         try {
@@ -56,12 +52,11 @@ public class Main {
         } catch (InputMismatchException e) {
             System.out.println("Đầu vào không hợp lệ. Vui lòng nhập một số.");
         } finally {
-            scanner.nextLine(); // Luôn đọc dòng mới sau nextInt()
+            scanner.nextLine();
         }
         return choice;
     }
 
-    // Xử lý lựa chọn
     private static void handleChoice(int choice) {
         switch (choice) {
             case 1:
@@ -96,19 +91,16 @@ public class Main {
                 manager.saveOrders(); // Lưu thủ công
                 break;
             case 0:
-                // Xử lý thoát đã thực hiện trong vòng lặp main
                 break;
             default:
                 System.out.println("Lựa chọn không hợp lệ. Vui lòng thử lại.");
         }
-        // Tạm dừng sau mỗi hành động (trừ khi thoát)
         if (choice != 0) {
             System.out.print("\nNhấn Enter để tiếp tục...");
             scanner.nextLine();
         }
     }
 
-    // === Các hàm chức năng gọi Manager và hiển thị ===
 
     private static void addOrder() {
         System.out.println("\n--- Thêm Đơn Hàng Mới ---");
@@ -119,7 +111,7 @@ public class Main {
         if (name.isEmpty()) { System.out.println("Tên khách hàng không được để trống."); return; } // Giả sử tên bắt buộc
 
         int date = readInt("Nhập ngày đặt hàng (yyyyMMdd): ");
-        if (date == -1) return; // Nhập lỗi
+        if (date == -1) return;
 
         System.out.print("Loại đơn hàng (1: Điện tử, 2: Quần áo): ");
         int type = readInt("");
@@ -146,7 +138,6 @@ public class Main {
         if (manager.addOrder(newOrder)) {
             System.out.println("Thêm đơn hàng thành công!");
         } else {
-            // Lỗi đã được OrderManager in ra (ví dụ: ID trùng lặp)
             System.out.println("Thêm đơn hàng thất bại."); // Thêm thông báo chung nếu manager không in
         }
     }
@@ -184,7 +175,6 @@ public class Main {
             System.out.println("Không có đơn hàng cho báo cáo.");
             return;
         }
-        // Sử dụng tiêu đề tiếng Việt
         System.out.printf("%-15s | %-25s | %s%n", "Mã ĐH", "Tên Khách Hàng", "Tổng Tiền");
         System.out.println("----------------|---------------------------|---------------");
         double totalRevenue = 0;
@@ -194,11 +184,9 @@ public class Main {
             totalRevenue += price;
         }
         System.out.println("----------------|---------------------------|---------------");
-        // Sử dụng tiêu đề tiếng Việt
         System.out.printf("%-43s | %.2f%n", "TỔNG DOANH THU:", totalRevenue);
     }
 
-    // --- Helper đọc input ---
     private static String readString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
@@ -206,25 +194,25 @@ public class Main {
 
     private static int readInt(String prompt) {
         System.out.print(prompt);
-        int value = -1; // Giá trị trả về nếu lỗi
+        int value = -1;
         try {
             value = scanner.nextInt();
         } catch (InputMismatchException e) {
             System.out.println("Đầu vào không hợp lệ. Vui lòng nhập số nguyên.");
         } finally {
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
         }
         return value;
     }
     private static double readDouble(String prompt) {
         System.out.print(prompt);
-        double value = -1.0; // Giá trị trả về nếu lỗi
+        double value = -1.0;
         try {
             value = scanner.nextDouble();
         } catch (InputMismatchException e) {
             System.out.println("Đầu vào không hợp lệ. Vui lòng nhập một số.");
         } finally {
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
         }
         return value;
     }

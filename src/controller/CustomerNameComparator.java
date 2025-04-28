@@ -1,6 +1,6 @@
-package controller; // Đặt trong controller theo yêu cầu hình ảnh
+package controller;
 
-import model.Order; // Phải import Order từ model
+import model.Order;
 import java.util.Comparator;
 
 public class CustomerNameComparator implements Comparator<Order> {

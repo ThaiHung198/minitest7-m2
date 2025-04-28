@@ -1,7 +1,7 @@
 package controller;
 
 import model.Order;
-import storage.OrderStorage; // Import lớp OrderStorage (giờ là class)
+import storage.OrderStorage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,19 +16,15 @@ public class OrderManager {
     // Constructor nhận vào đối tượng OrderStorage (class)
     public OrderManager(OrderStorage storage) {
         this.storage = Objects.requireNonNull(storage, "Storage không được là null"); // Dịch
-        loadOrders(); // Tải dữ liệu khi khởi tạo
+        loadOrders();
     }
 
-    // Tải dữ liệu (đơn giản hơn vì loadOrders của class OrderStorage tự xử lý lỗi)
     private void loadOrders() {
         this.orders = storage.loadOrders(); // Gọi trực tiếp, loadOrders trả về list rỗng nếu lỗi
-        // Đảm bảo orders không bao giờ là null
         if (this.orders == null) {
             System.err.println("CẢNH BÁO QUAN TRỌNG: loadOrders() trả về null. Buộc khởi tạo danh sách rỗng."); // Dịch
             this.orders = new ArrayList<>();
         }
-        // Di chuyển log ra sau khi kiểm tra dữ liệu mẫu
-        // System.out.println("INFO: OrderManager initialized. Loaded " + this.orders.size() + " orders.");
 
         // Thêm dữ liệu mẫu nếu danh sách rỗng sau khi load
         boolean hadSampleData = false; // Biến để kiểm tra xem có thêm mẫu không
@@ -42,29 +38,22 @@ public class OrderManager {
 
     }
 
-    // Phương thức tạo dữ liệu mẫu (Giống như trước)
     private void initializeSampleData() {
         try {
-            // Sửa lỗi thứ tự tham số trong ClothingOrder constructor
             this.orders.add(new model.ElectronicsOrder("ELEC001", "Nguyen Van A", 20231027, 15500000.0, 24));
             this.orders.add(new model.ClothingOrder("CLOTH002", "Tran Thi B", 20231026, "L", 450000.0)); // Giá trước, Size sau
             this.orders.add(new model.ClothingOrder("CLOTH003", "Le Van C", 20231028, "M", 250000.0)); // Giá trước, Size sau
-            System.out.println("THÔNG TIN: Đã thêm các đơn hàng mẫu."); // Dịch
+            System.out.println("THÔNG TIN: Đã thêm các đơn hàng mẫu.");
         } catch (Exception e) {
-            System.err.println("LỖI tạo dữ liệu mẫu: " + e.getMessage()); // Dịch
+            System.err.println("LỖI tạo dữ liệu mẫu: " + e.getMessage());
         }
     }
 
 
-    // Lưu dữ liệu (đơn giản hơn vì saveOrders của class OrderStorage tự xử lý lỗi)
     public void saveOrders() {
-        // Không cần try-catch ở đây nữa nếu saveOrders trong OrderStorage ném RuntimeException
-        // Hoặc nếu nó không ném gì cả thì gọi trực tiếp
         storage.saveOrders(this.orders);
-        // Thêm try-catch nếu saveOrders ném checked exception khác RuntimeException
     }
 
-    // --- Các phương thức khác giữ nguyên ---
     public boolean addOrder(Order order) {
         if (order == null || order.getOrderId() == null || order.getOrderId().trim().isEmpty()) {
             System.err.println("LỖI: Dữ liệu đơn hàng không hợp lệ (ID null hoặc rỗng)."); // Dịch
@@ -78,18 +67,16 @@ public class OrderManager {
             }
         }
         orders.add(order);
-        // Nên để lớp View thông báo thành công
         return true;
     }
 
     public boolean removeOrder(String orderId) {
         if (orderId == null || orderId.trim().isEmpty()) {
-            System.err.println("LỖI: Mã đơn hàng cần xóa không được để trống."); // Dịch
+            System.err.println("LỖI: Mã đơn hàng cần xóa không được để trống.");
             return false;
         }
         String idToRemove = orderId.trim();
         boolean removed = orders.removeIf(order -> idToRemove.equals(order.getOrderId()));
-        // Để lớp View thông báo kết quả
         return removed;
     }
 
